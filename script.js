@@ -10,47 +10,27 @@ async function generateImage() {
   document.getElementById("downloadBtn").style.display = "none";
 
   try {
-    const response = await fetch("https://api.replicate.com/v1/predictions", {
+    const response = await fetch("/api/generate", {
       method: "POST",
       headers: {
-        "Authorization": "Token r8_C92Qickk3rv4absxtrnWPnRLBkopBO03mEPN3",
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        version: "f8b4b6ee0c4e64904ed1c13f7736a8b260b8142787844fba5748e5014f2e0382",
-        input: { prompt: prompt }
-      })
+      body: JSON.stringify({ prompt })
     });
 
     const result = await response.json();
 
-    if (result?.urls?.get) {
-      let final;
-      for (let i = 0; i < 20; i++) {
-        await new Promise(r => setTimeout(r, 2000));
-        const statusRes = await fetch(result.urls.get, {
-          headers: {
-            "Authorization": "Token r8_C92Qickk3rv4absxtrnWPnRLBkopBO03mEPN3"
-          }
-        });
-        final = await statusRes.json();
-        if (final.status === "succeeded") break;
-      }
-
-      if (final.output && final.output[0]) {
-        const imageUrl = final.output[0];
-        document.getElementById("status").innerText = "生成成功 ✅";
-        const img = document.getElementById("outputImage");
-        img.src = imageUrl;
-        img.style.display = "block";
-        document.getElementById("lockSection").style.display = "block";
-        const downloadBtn = document.getElementById("downloadBtn");
-        downloadBtn.href = imageUrl;
-      } else {
-        document.getElementById("status").innerText = "生成失败 ❌";
-      }
+    if (result?.image) {
+      const imageUrl = result.image;
+      document.getElementById("status").innerText = "生成成功 ✅";
+      const img = document.getElementById("outputImage");
+      img.src = imageUrl;
+      img.style.display = "block";
+      document.getElementById("lockSection").style.display = "block";
+      const downloadBtn = document.getElementById("downloadBtn");
+      downloadBtn.href = imageUrl;
     } else {
-      document.getElementById("status").innerText = "模型调用失败 ❌";
+      document.getElementById("status").innerText = "生成失败 ❌";
     }
   } catch (err) {
     console.error(err);

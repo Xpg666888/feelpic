@@ -12,10 +12,10 @@ async function generateImage() {
   try {
     const response = await fetch("https://api.replicate.com/v1/predictions", {
       method: "POST",
-      headers: {
-        "Authorization": "Token r8_你的Token", // ⬅️ 替换为你的真实 Token
-        "Content-Type": "application/json"
-      },
+    headers: {
+  "Authorization": "Token r8_C92Qickk3rv4absxtrnWPnRLBkopBO03mEPN3
+  "Content-Type": "application/json"
+}
       body: JSON.stringify({
         version: "f8b4b6ee0c4e64904ed1c13f7736a8b260b8142787844fba5748e5014f2e0382",
         input: { prompt: prompt }
@@ -30,7 +30,8 @@ async function generateImage() {
         await new Promise(r => setTimeout(r, 2000));
         const statusRes = await fetch(result.urls.get, {
           headers: {
-            "Authorization": "Token r8_你的Token" // ⬅️ 替换为你的 Token
+            "Authorization": "Token r8_C92Qickk3rv4absxtrnWPnRLBkopBO03mEPN3
+"Content-Type": "application/json"
           }
         });
         final = await statusRes.json();

@@ -1,16 +1,57 @@
-function generateImage() {
+async function generateImage() {
   const prompt = document.getElementById("promptInput").value;
   if (!prompt) {
-    alert("请输入一句话描述你的情绪");
+    alert("请输入一句描述，例如：一个人在星空下骑自行车");
     return;
   }
-  document.getElementById("status").innerText = "生成中...";
+
+  document.getElementById("status").innerText = "AI正在生成插画，请稍等...";
   document.getElementById("outputImage").style.display = "none";
 
-  // 模拟生成
-  setTimeout(() => {
-    document.getElementById("status").innerText = "（这是模拟图，后续将接入AI生成）";
-    document.getElementById("outputImage").src = "https://placekitten.com/400/300";
-    document.getElementById("outputImage").style.display = "block";
-  }, 2000);
+  try {
+    const response = await fetch("https://api.replicate.com/v1/predictions", {
+      method: "POST",
+      headers: {
+        "Authorization": "Token r8_C92Qickk3rv4absxtrnWPnRLBkopBO03mEPN3",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        version: "f8b4b6ee0c4e64904ed1c13f7736a8b260b8142787844fba5748e5014f2e0382", // sdxl 模型版本
+        input: {
+          prompt: prompt
+        }
+      })
+    });
+
+    const result = await response.json();
+
+    if (result?.urls?.get) {
+      // Poll 直到生成完成
+      let final;
+      for (let i = 0; i < 20; i++) {
+        await new Promise(r => setTimeout(r, 2000));
+        const statusRes = await fetch(result.urls.get, {
+          headers: {
+            "Authorization": "Token r8_C92Qickk3rv4absxtrnWPnRLBkopBO03mEPN3",
+          }
+        });
+        final = await statusRes.json();
+        if (final.status === "succeeded") break;
+      }
+
+      if (final.output && final.output[0]) {
+        document.getElementById("status").innerText = "生成成功 ✅";
+        document.getElementById("outputImage").src = final.output[0];
+        document.getElementById("outputImage").style.display = "block";
+      } else {
+        document.getElementById("status").innerText = "生成失败 ❌";
+      }
+    } else {
+      document.getElementById("status").innerText = "模型调用失败 ❌";
+    }
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById("status").innerText = "请求出错 ❌";
+  }
 }

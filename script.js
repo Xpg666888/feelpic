@@ -10,12 +10,14 @@ async function generateImage() {
   document.getElementById("downloadBtn").style.display = "none";
 
   try {
-    const response = await fetch("https://api.replicate.com/v1/predictions", {
-      method: "POST",
-    headers: {
-  "Authorization": "Token r8_C92Qickk3rv4absxtrnWPnRLBkopBO03mEPN3
-  "Content-Type": "application/json"
-}
+const response = await fetch("https://api.replicate.com/v1/predictions", {
+  method: "POST",
+  headers: {
+    "Authorization": "Token r8_C92Qickk3rv4absxtrnWPnRLBkopBO03mEPN3
+    "Content-Type": "application/json"
+  },
+  ...
+});
       body: JSON.stringify({
         version: "f8b4b6ee0c4e64904ed1c13f7736a8b260b8142787844fba5748e5014f2e0382",
         input: { prompt: prompt }
@@ -29,11 +31,10 @@ async function generateImage() {
       for (let i = 0; i < 20; i++) {
         await new Promise(r => setTimeout(r, 2000));
         const statusRes = await fetch(result.urls.get, {
-          headers: {
-            "Authorization": "Token r8_C92Qickk3rv4absxtrnWPnRLBkopBO03mEPN3
-"Content-Type": "application/json"
-          }
-        });
+  headers: {
+    "Authorization": "Token r8_C92Qickk3rv4absxtrnWPnRLBkopBO03mEPN3
+  }
+});
         final = await statusRes.json();
         if (final.status === "succeeded") break;
       }

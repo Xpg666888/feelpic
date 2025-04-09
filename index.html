@@ -13,9 +13,22 @@
     <input type="text" id="promptInput" placeholder="如：一个孤独的少年站在雨中" />
     <button onclick="generateImage()">生成插画</button>
     <div id="result">
-      <p id="status"></p>
-      <img id="outputImage" src="" style="display:none;max-width:100%;margin-top:20px;" />
-    </div>
+  <p id="status"></p>
+  <img id="outputImage" src="" style="display:none;max-width:100%;margin-top:20px;border-radius:12px;" />
+
+  <!-- 🔒 口令输入逻辑开始 -->
+  <div id="lockSection" style="display:none; margin-top: 15px;">
+    <p style="margin-bottom: 5px;">请输入口令解锁下载：</p>
+    <input type="password" id="unlockCode" placeholder="请输入下载口令" style="padding:8px; border-radius:4px; border:1px solid #ccc;" />
+    <button onclick="checkCode()" style="margin-left:10px;">确认</button>
+    <p id="codeHint" style="color:#f87171;"></p>
+  </div>
+
+  <a id="downloadBtn" href="#" download="feelpic.jpg"
+     style="display:none;margin-top:10px;display:inline-block;background:#10b981;color:#fff;padding:8px 16px;border-radius:6px;text-decoration:none;">
+    下载插画
+  </a>
+</div>
   </div>
   <script src="script.js"></script>
 </body>

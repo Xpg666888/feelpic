@@ -1,18 +1,22 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>视频解析网站</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FeelPic · AI情绪插画生成器</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="container">
-        <h1>视频解析助手</h1>
-        <input type="text" id="urlInput" placeholder="粘贴你的视频链接...">
-        <button onclick="parseVideo()">解析视频</button>
-        <div id="result"></div>
+  <div class="container">
+    <h1>FeelPic</h1>
+    <p>输入你的情绪，让AI为你生成一张专属插画</p>
+    <input type="text" id="promptInput" placeholder="如：一个孤独的少年站在雨中" />
+    <button onclick="generateImage()">生成插画</button>
+    <div id="result">
+      <p id="status"></p>
+      <img id="outputImage" src="" style="display:none;max-width:100%;margin-top:20px;" />
     </div>
-    <script src="script.js"></script>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>

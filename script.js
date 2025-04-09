@@ -43,10 +43,9 @@ async function generateImage() {
         const img = document.getElementById("outputImage");
         img.src = imageUrl;
         img.style.display = "block";
-
+document.getElementById("lockSection").style.display = "block";
         const downloadBtn = document.getElementById("downloadBtn");
         downloadBtn.href = imageUrl;
-        downloadBtn.style.display = "inline-block";
       } else {
         document.getElementById("status").innerText = "生成失败 ❌";
       }

@@ -31,8 +31,13 @@ button {
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 button:hover {
   background-color: #2563eb;
+}
+
+#result {
+  margin-top: 20px;
 }

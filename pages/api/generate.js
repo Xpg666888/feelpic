@@ -4,7 +4,6 @@ export default async function handler(req, res) {
   }
 
   const prompt = req.body.prompt;
-
   if (!prompt) {
     return res.status(400).json({ error: '缺少 prompt 参数' });
   }
@@ -13,7 +12,7 @@ export default async function handler(req, res) {
     const prediction = await fetch("https://api.replicate.com/v1/predictions", {
       method: "POST",
       headers: {
-        "Authorization": "Token r8_C92Qickk3rv4absxtrnWPnRLBkopBO03mEPN3",
+        "Authorization": `Token ${process.env.REPLICATE_API_KEY}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
@@ -29,13 +28,13 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Replicate 返回失败' });
     }
 
-    // 轮询等待生成完成
+    // 轮询直到生成成功
     let finalResult;
     for (let i = 0; i < 20; i++) {
       await new Promise(r => setTimeout(r, 2000));
       const checkRes = await fetch(statusUrl, {
         headers: {
-          "Authorization": "Token r8_C92Qickk3rv4absxtrnWPnRLBkopBO03mEPN3"
+          "Authorization": `Token ${process.env.REPLICATE_API_KEY}`
         }
       });
       finalResult = await checkRes.json();
@@ -49,7 +48,7 @@ export default async function handler(req, res) {
     }
 
   } catch (err) {
-    console.error(err);
+    console.error("服务错误：", err);
     res.status(500).json({ error: "服务器错误" });
   }
 }
